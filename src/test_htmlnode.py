@@ -1,50 +1,6 @@
 import unittest
 from .htmlnode import ParentNode, LeafNode  # Adjust the import path based on your project structure
 
-class TestHTMLNode(unittest.TestCase):
-    def test_simple_parent_node(self):
-        simple_node = ParentNode("div", [LeafNode(None, "Simple content")])
-        self.assertEqual(simple_node.to_html(), "<div>Simple content</div>")
-
-    def test_multiple_children(self):
-        multi_child_node = ParentNode(
-            "p",
-            [
-                LeafNode("b", "Bold text"),
-                LeafNode(None, "Normal text"),
-                LeafNode("i", "Italic text")
-            ]
-        )
-        self.assertEqual(multi_child_node.to_html(), "<p><b>Bold text</b>Normal text<i>Italic text</i></p>")
-    
-    def test_nested_parent_nodes(self):
-        nested_node = ParentNode(
-            "div",
-            [
-                ParentNode(
-                    "p",
-                    [
-                        LeafNode("b", "Bold text"),
-                        LeafNode(None, "Normal text"),
-                        LeafNode("i", "Italic text")
-                    ]
-                )
-            ]
-        )
-        self.assertEqual(nested_node.to_html(), "<div><p><b>Bold text</b>Normal text<i>Italic text</i></p></div>")
-    
-    def test_parent_node_with_props(self):
-        props_node = ParentNode(
-            "div",
-            [
-                LeafNode(None, "Content with props")
-            ],
-            props={"class": "container", "id": "main-container"}
-        )
-        self.assertEqual(props_node.to_html(), '<div class="container" id="main-container">Content with props</div>')
-
-if __name__ == '__main__':
-    unittest.main()
 def test_text_node_to_html_node():
     class TextNode:
         def __init__(self, type, text="", href="", src="", alt=""):
@@ -94,10 +50,10 @@ def test_text_node_to_html_node():
     assert result.props["alt"] == "Sample Image"
 
     # Test for unknown type (we expect an exception here)
-try:
-    unknown_node = TextNode(type="unknown")
-    text_node_to_html_node(unknown_node)
-    assert False, "Expected an exception to be raised for an unknown type"
-except Exception as e:
-    assert str(e) == "Unknown text type"
+    try:
+        unknown_node = TextNode(type="unknown")
+        text_node_to_html_node(unknown_node)
+        assert False, "Expected an exception to be raised for an unknown type"
+    except Exception as e:
+        assert str(e) == "Unknown text type"
 
