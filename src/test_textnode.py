@@ -35,3 +35,10 @@ class TestTextNode(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+# Test case
+node = TextNode("This is text with a **bolded** word", "text")
+new_nodes = split_nodes_delimiter([node], "**", "bold")
+
+# Print results in a clearer format
+for new_node in new_nodes:
+    print(f"Text: '{new_node.text}', Type: '{new_node.text_type}'")
