@@ -1,8 +1,5 @@
 from markdown_extractor import extract_markdown_links, extract_markdown_images
 
-text_type_text = "text"
-text_type_link = "link"
-text_type_image = "image"
 
 class TextNode:
     def __init__(self, text, text_type, url=None):
@@ -18,6 +15,13 @@ class TextNode:
         return False
     def __repr__(self):
         return f'TextNode({self.text}, {self.text_type}, {self.url})'
+    
+text_type_text = "text"
+text_type_bold = "bold"
+text_type_italic = "italic"
+text_type_code = "code"
+text_type_image = "image"
+text_type_link = "link"
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -47,7 +51,7 @@ def split_nodes_image(old_nodes):
             current_text = node.text
 
             while images:
-                image_tuple = images.pop(0)
+                image_tup = images.pop(0)
                 parts = current_text.split(f"![{image_tup[0]}]({image_tup[1]})", 1)
 
                 if parts[0]:
@@ -95,3 +99,16 @@ def split_nodes_link(old_nodes):
 
     return [node for node in new_nodes if node.text]  # Exclude empty text nodes
 
+def text_to_textnodes(text):
+    # Step 1: Start with a single TextNode
+    nodes = [TextNode(text, text_type_text)]
+    
+    # Step 2: Apply split functions for different markdown
+    nodes = split_nodes_delimiter(nodes, "**", text_type_bold)
+    nodes = split_nodes_delimiter(nodes, "*", text_type_italic)
+    nodes = split_nodes_delimiter(nodes, "`", text_type_code)
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+
+    # Step 3: Return the final list of TextNode objects
+    return nodes
